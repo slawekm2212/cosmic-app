@@ -1,19 +1,61 @@
 package akademia.cosmicapp.controllers;
 
 import akademia.cosmicapp.models.Planet;
+import akademia.cosmicapp.models.dtos.PlanetDto;
 import akademia.cosmicapp.services.PlanetService;
-import org.springframework.stereotype.Controller;
-import org.springframework.web.bind.annotation.CrossOrigin;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.bind.annotation.*;
+
+import java.util.List;
 
 @RestController
 @CrossOrigin
 @RequestMapping("/api/v1")
 public class PlanetController {
-    private PlanetService planetServic;
+    private PlanetService planetService;
 
-    public PlanetController(PlanetService planetServic) {
-        this.planetServic = planetServic;
+    public PlanetController(PlanetService planetService) {
+        this.planetService = planetService;
     }
+
+   @GetMapping("/planets")
+    public List<Planet> getPlanets() {
+        return planetService.getPlanets();
+    }
+/*
+    @GetMapping("/dto/planets")
+    public List<PlanetDto> getPlanetsDto() {
+        return planetService.getPlanetsDto();
+    }
+*/
+    @GetMapping("/dto/planets")
+    public List<PlanetDto> getPlanetByDistance(@RequestParam(required = false) Long distance) {
+
+    if (distance != null && distance > 0) {
+        return planetService.getPlanetsByDistanceFromSun(distance);
+    }
+    return planetService.getPlanetsDto();
+}
+
+  //  @GetMapping("/dto/planets/{distance}")
+  //  public List<PlanetDto> getPlanetByDistance(@PathVariable Long distance) {
+ //       return planetService.getPlanetsByDistanceFromSun(distance);
+ //   }
+
+
+
+    @PostMapping("/dto/planets")
+    public Planet addPlanet(@RequestBody PlanetDto planetDto) {
+        return planetService.addPlanet(planetDto);
+    }
+
+    @PutMapping("/dto/planets")
+    public void updatePlanet(PlanetDto planetDto) {
+        planetService.updatePlanet(planetDto);
+    }
+
+    @DeleteMapping("/dto/planets/{planetName}")
+    public void deletePlanet(@PathVariable String planetName) {
+        planetService.deletePlanet(planetName);
+    }
+
 }

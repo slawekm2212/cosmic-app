@@ -1,15 +1,24 @@
 package akademia.cosmicapp.controllers;
 
+import akademia.cosmicapp.services.PlanetService;
 import org.springframework.stereotype.Controller;
+import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.GetMapping;
 
 @Controller
 public class HomeController {
 
-    private String app;
+    private PlanetService planetService;
 
-    @GetMapping("/")
-    public String homePage(){
-        return "index";
+    public HomeController(PlanetService planetService) {
+        this.planetService = planetService;
+    }
+
+
+
+    @GetMapping("/planets")
+    public String homePage(Model model) {
+        model.addAttribute("planets", planetService.getPlanetsDto());
+        return "planets";
     }
 }

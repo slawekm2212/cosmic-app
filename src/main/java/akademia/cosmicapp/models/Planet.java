@@ -7,6 +7,8 @@ import lombok.NoArgsConstructor;
 import org.springframework.beans.factory.annotation.Value;
 
 import javax.persistence.*;
+import java.util.HashSet;
+import java.util.Set;
 
 @NoArgsConstructor
 @AllArgsConstructor
@@ -40,5 +42,18 @@ public class Planet {
 
     @Column(name = "planet_image")
     private String planetImage;
+
+    @ManyToMany(cascade ={
+            CascadeType.PERSIST,
+            CascadeType.MERGE}
+            )
+    @JoinTable(
+            name = "planet_tag",
+            joinColumns = @JoinColumn(name = "planet_id"),
+            inverseJoinColumns = @JoinColumn(name = "")
+    )
+    private Set<Tag> tags = new HashSet<>();
+
+
 
 }
